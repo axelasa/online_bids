@@ -5,7 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class NotificationService {
 
   /// A notification action which triggers a App navigation event
-  const String navigationActionId = 'id_3';
+  static const String navigationActionId = 'id_3';
 
   /// Defines a iOS/MacOS notification category for text input actions.
   static const String darwinNotificationCategoryText = 'textCategory';

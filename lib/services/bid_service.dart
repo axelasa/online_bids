@@ -1,11 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:online_bids/services/notification_service.dart';
 import '../models/bid_item.dart';
 
 class BidService {
-  final DatabaseReference _database = FirebaseDatabase.instance.reference();
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  final NotificationService _notificationService = NotificationService();
 
   // Fetch upcoming bids
   Future<List<BidItem>> getUpcomingBids() async {
@@ -104,6 +106,8 @@ class BidService {
       // Determine winner (highest bidder)
       String winningUserId = _findHighestBidder(bidData['participants']);
 
+      String bidTitle = bidData['title'] ?? 'Auction';
+
       // Update bid status and winner
       await bidRef.update({
         'status': 'completed',
@@ -111,7 +115,10 @@ class BidService {
       });
 
       // Send winner notification
-      await _sendWinnerNotification(bidId, winningUserId);
+      await _notificationService.sendBidWinnerNotification(
+          bidId,
+          bidTitle,
+          bidData['participants'][winningUserId]['username']??'Winner');
     } catch (e) {
       print('Error ending bid: $e');
     }
