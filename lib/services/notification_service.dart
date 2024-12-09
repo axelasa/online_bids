@@ -3,16 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationService {
-
-  /// A notification action which triggers a App navigation event
-  static const String navigationActionId = 'id_3';
-
-  /// Defines a iOS/MacOS notification category for text input actions.
-  static const String darwinNotificationCategoryText = 'textCategory';
-
-  /// Defines a iOS/MacOS notification category for plain actions.
-  static const String darwinNotificationCategoryPlain = 'plainCategory';
-
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
@@ -36,54 +26,16 @@ class NotificationService {
       FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     }
 
-    // Local Notifications Configuration
+    // Local Notifications Configuration====================================================================================================
     const AndroidInitializationSettings androidInitialize =
     AndroidInitializationSettings('@mipmap/ic_launcher');
-//macos amd ios
-    final List<DarwinNotificationCategory> darwinNotificationCategories =
-    <DarwinNotificationCategory>[
-      DarwinNotificationCategory(
-        darwinNotificationCategoryText,
-        actions: <DarwinNotificationAction>[
-          DarwinNotificationAction.text(
-            'text_1',
-            'Action 1',
-            buttonTitle: 'Send',
-            placeholder: 'Placeholder',
-          ),
-        ],
-      ),
-      DarwinNotificationCategory(
-        darwinNotificationCategoryPlain,
-        actions: <DarwinNotificationAction>[
-          DarwinNotificationAction.plain('id_1', 'Action 1'),
-          DarwinNotificationAction.plain(
-            'id_2',
-            'Action 2 (destructive)',
-            options: <DarwinNotificationActionOption>{
-              DarwinNotificationActionOption.destructive,
-            },
-          ),
-          DarwinNotificationAction.plain(
-            navigationActionId,
-            'Action 3 (foreground)',
-            options: <DarwinNotificationActionOption>{
-              DarwinNotificationActionOption.foreground,
-            },
-          ),
-          DarwinNotificationAction.plain(
-            'id_4',
-            'Action 4 (auth required)',
-            options: <DarwinNotificationActionOption>{
-              DarwinNotificationActionOption.authenticationRequired,
-            },
-          ),
-        ],
-        options: <DarwinNotificationCategoryOption>{
-          DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
-        },
-      )
-    ];
+
+    final IOSInitializationSettings iosInitialize =
+    IOSInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+    );
 
     final InitializationSettings initializationSettings =
     InitializationSettings(
@@ -95,6 +47,7 @@ class NotificationService {
       initializationSettings,
       onSelectNotification: _handleNotificationTap,
     );
+    //=========================================================================================================================================
   }
 
   // Get FCM Token for the device
@@ -187,14 +140,12 @@ class NotificationService {
     AndroidNotificationDetails(
       'bid_channel',
       'Bid Notifications',
-      importance: Importance.max,
+      importance: Importance.high,
       priority: Priority.high,
     );
 
-    const DarwinNotificationDetails iOSPlatformChannelSpecifics =
-    DarwinNotificationDetails(
-      categoryIdentifier: darwinNotificationCategoryPlain,
-    );
+    const IOSNotificationDetails iOSPlatformChannelSpecifics =
+    IOSNotificationDetails();
 
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
