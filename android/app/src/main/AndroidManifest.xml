@@ -20,9 +20,8 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize"
-
-        android:showWhenLocked="true"
-        android:turnScreenOn="true">
+            android:showWhenLocked="true"
+            android:turnScreenOn="true">
             <!--         above 2 lines enable show full screen notifications-->
 
 

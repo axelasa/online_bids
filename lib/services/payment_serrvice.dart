@@ -92,29 +92,29 @@ class PaymentService {
   Future<bool> _processPayment(String bidId, String userId, double amount) async {
     try {
       // Stripe payment integration
-      PaymentMethod paymentMethod = await Stripe.instance.createPaymentMethod(
-        PaymentMethodParams.card(
-          paymentMethodData: PaymentMethodData(),
-        ),
-      );
+      // PaymentMethod paymentMethod = await Stripe.instance.createPaymentMethod(
+      //   PaymentMethodParams.card(
+      //     paymentMethodData: PaymentMethodData(),
+      //   ),
+      // );
 
       // Server should handle payment intents for better security
       // Replace with your backend API call
-      final paymentIntent = await createPaymentIntentOnServer(
-        amount: (amount * 100).toInt(),
-        currency: 'usd',
-        paymentMethodId: paymentMethod.id,
-      );
+      // final paymentIntent = await createPaymentIntentOnServer(
+      //   amount: (amount * 100).toInt(),
+      //   currency: 'usd',
+      //   // paymentMethodId: paymentMethod.id,
+      // );
 
-      if (paymentIntent['status'] == 'succeeded') {
-        await _database.child('bid_entries').child(bidId).child(userId).set({
-          'paid': true,
-          'entryFee': amount,
-          'timestamp': DateTime.now().toIso8601String(),
-        });
-
-        return true;
-      }
+      // if (paymentIntent['status'] == 'succeeded') {
+      //   await _database.child('bid_entries').child(bidId).child(userId).set({
+      //     'paid': true,
+      //     'entryFee': amount,
+      //     'timestamp': DateTime.now().toIso8601String(),
+      //   });
+      //
+      //   return true;
+      // }
 
       return false;
     } catch (e) {
